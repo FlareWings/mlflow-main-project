@@ -53,12 +53,12 @@ if __name__ == "__main__":
         print("Gradient Boosting Classifier model (learning_rate={:.2f}, max_leaf_nodes={:.0f}, n_estimators={:.0f}, max_features={:.2f}, max_depth={:.0f}, random_state={:.0f}):".format(learning_rate, max_leaf_nodes, n_estimators, max_features, max_depth, random_state))
         print("  Accuracy of the Experiment: {:.2f}%".format(Accuracy_Score))
 
-        mlflow.log_param("Learning rate", learning_rate)
-        mlflow.log_param("Max leaf nodes", max_leaf_nodes)
+        mlflow.log_param("learning_rate", learning_rate)
+        mlflow.log_param("max_leaf_nodes", max_leaf_nodes)
         mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("Max features", max_features)
-        mlflow.log_param("Max depth", max_depth)
-        mlflow.log_param("Random state", random_state)
+        mlflow.log_param("max_features", max_features)
+        mlflow.log_param("max_depth", max_depth)
+        mlflow.log_param("random_state", random_state)
         mlflow.log_metric("Accuracy Score in Percentage", Accuracy_Score)
 
         mlflow.sklearn.log_model(GBCModel, "model", registered_model_name="Gradient Boosting Classifier")
