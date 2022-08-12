@@ -13,7 +13,7 @@ import mlflow
 import mlflow.sklearn
 
 def eval_metrics(actual, pred):
-    Accuracy_Score = round(accuracy_score(actual, pred), 2)*100
+    Accuracy_Score = round(accuracy_score(actual, pred), 2)
     Precision_score = round(precision_score(y_test, Predictions, average='micro'),2)
     Recall_score = round(recall_score(y_test, Predictions, average='micro'),2)
     F1_score = round(f1_score(y_test, Predictions, average='micro'),2)
