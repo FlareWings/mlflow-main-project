@@ -4,13 +4,20 @@ import sys
 
 import pandas as pd
 import numpy as np
-from sklearn.metrics import mean_squared_error, mean_absolute_error, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import GradientBoostingClassifier
 
 import mlflow
 import mlflow.sklearn
+
+def eval_metrics(actual, pred):
+    Accuracy_Score = round(accuracy_score(actual, pred), 2)*100
+    Precision_score = round(precision_score(y_test, Predictions, average='micro'),2)
+    Recall_score = round(recall_score(y_test, Predictions, average='micro'),2)
+    F1_score = round(f1_score(y_test, Predictions, average='micro'),2)
+    return Accuracy_Score, Precision_score, Recall_score, F1_score
 
 
 if __name__ == "__main__":
@@ -48,10 +55,13 @@ if __name__ == "__main__":
 
         predicted_qualities = GBCModel.predict(X_test_scaled)
 
-        Accuracy_Score = round(accuracy_score(y_test, predicted_qualities), 2)*100
-
+        (Accuracy_Score, Precision_score, Recall_score, F1_score) = eval_metrics(y_test, predicted_qualities)
+        
         print("Gradient Boosting Classifier model (learning_rate={:.2f}, max_leaf_nodes={:.0f}, n_estimators={:.0f}, max_features={:.2f}, max_depth={:.0f}, random_state={:.0f}):".format(learning_rate, max_leaf_nodes, n_estimators, max_features, max_depth, random_state))
-        print("  Accuracy of the Experiment: {:.2f}%".format(Accuracy_Score))
+        print("  Accuracy of the Experiment: {:.2f}".format(Accuracy_Score))
+        print("  Precision of the Experiment: {:.2f}".format(Precision_score))
+        print("  Recall of the Experiment: {:.2f}".format(Recall_score))
+        print("  F1 Score of the Experiment: {:.2f}".format(F1_score))
 
         mlflow.log_param("learning_rate", learning_rate)
         mlflow.log_param("max_leaf_nodes", max_leaf_nodes)
@@ -59,6 +69,9 @@ if __name__ == "__main__":
         mlflow.log_param("max_features", max_features)
         mlflow.log_param("max_depth", max_depth)
         mlflow.log_param("random_state", random_state)
-        mlflow.log_metric("Accuracy Score in Percentage", Accuracy_Score)
+        mlflow.log_metric("Accuracy_Score", Accuracy_Score)
+        mlflow.log_metric("Precision_score", Precision_score)
+        mlflow.log_metric("Recall_score", Recall_score)
+        mlflow.log_metric("F1_score", F1_score)
 
         mlflow.sklearn.log_model(GBCModel, "model", registered_model_name="Gradient Boosting Classifier")
